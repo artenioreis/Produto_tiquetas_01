@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Configuração</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔐 Configuração</h1>
+        <form method="POST">
+            <input type="text" name="server" placeholder="Servidor" required>
+            <input type="text" name="database" placeholder="Banco de Dados" required>
+            <select name="driver">
+                <option value="SQL Server">SQL Server</option>
+                <option value="ODBC Driver 17 for SQL Server">ODBC Driver 17</option>
+            </select>
+            <select name="trusted">
+                <option value="no">SQL Server (Usuário e Senha)</option>
+                <option value="yes">Windows (Trusted)</option>
+            </select>
+            <input type="text" name="user" placeholder="Usuário">
+            <input type="password" name="pwd" placeholder="Senha">
+            <button type="submit" class="btn">Conectar</button>
+        </form>
+    </div>
+</body>
+
+</html>

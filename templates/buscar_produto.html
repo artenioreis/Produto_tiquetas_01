@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Produtos - Varejão Farma</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+        }
+
+        .btn-config {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .search-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .search-box h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 100px 14px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-camera {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .btn-camera:hover {
+            background: #5568d3;
+        }
+
+        .btn-search {
+            padding: 14px 30px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .info-text {
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .results {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 13px;
+            text-decoration: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .btn-info {
+            background: #17a2b8;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .no-results {
+            padding: 60px;
+            text-align: center;
+            color: #666;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+        }
+
+        .modal-content {
+            position: relative;
+            margin: 5% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+            background: white;
+            border-radius: 15px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .modal-header h3 {
+            color: #333;
+            margin: 0;
+        }
+
+        .close-modal {
+            font-size: 32px;
+            font-weight: bold;
+            color: #999;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        #scanner-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        #scanner-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #scanner-container canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .scanner-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 120px;
+            border: 3px solid #28a745;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+
+        .scanner-line {
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #28a745, transparent);
+            animation: scan 2s linear infinite;
+        }
+
+        @keyframes scan {
+
+            0%,
+            100% {
+                top: 0;
+            }
+
+            50% {
+                top: calc(100% - 3px);
+            }
+        }
+
+        .scanner-status {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .scanner-status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .scanner-status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .scanner-tips {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            border-radius: 5px;
+        }
+
+        .btn-close-scanner,
+        .btn-manual {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .btn-manual {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-close-scanner {
+            background: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Varejão Farma V.01</h1>
+            <a href="{{ url_for('conexao') }}" class="btn-config">⚙️ Configurações</a>
+        </div>
+
+        <div class="search-box">
+            <h2>🔍 Buscar Produto</h2>
+            <form method="POST" class="search-form" id="searchForm">
+                <div class="input-wrapper">
+                    <input type="text" name="termo_busca" id="termo_busca" class="search-input"
+                        placeholder="Digite código, EAN ou nome do produto..." value="{{ termo_busca }}" autofocus>
+                    <button type="button" class="btn-camera" id="btnCamera">📷</button>
+                </div>
+                <button type="submit" class="btn-search">🔍 Buscar</button>
+            </form>
+            <p class="info-text">💡 Dica: Busque por código, EAN ou nome | 📷 Clique na câmera para escanear código de
+                barras</p>
+        </div>
+
+        {% if resultados %}
+        <div class="results">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Descrição</th>
+                        <th>EAN</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for produto in resultados %}
+                    <tr>
+                        <td><strong>{{ produto.Codigo }}</strong></td>
+                        <td>{{ produto.Descricao }}</td>
+                        <td><code>{{ produto.Cod_EAN or '-' }}</code></td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{{ url_for('detalhes_produto', codigo=produto.Codigo) }}"
+                                    class="btn-small btn-info">📊 Detalhes</a>
+                                <a href="{{ url_for('etiqueta', cod_prod=produto.Codigo, modelo='gondola') }}"
+                                    class="btn-small btn-warning" target="_blank">🏷️ Gôndola</a>
+                                <a href="{{ url_for('etiqueta', cod_prod=produto.Codigo, modelo='atacado') }}"
+                                    class="btn-small btn-success" target="_blank">📦 Atacado</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% elif termo_busca %}
+        <div class="results">
+            <div class="no-results">
+                <h3>🔍 Nenhum resultado encontrado</h3>
+                <p>Tente buscar por outro termo ou escaneie o código de barras</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div id="scannerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📷 Scanner Quagga.JS - Código de Barras</h3><span class="close-modal" id="closeModal">&times;</span>
+            </div>
+            <div class="scanner-tips"><strong>💡 Dicas:</strong> Distância 15-30cm | Boa iluminação | Código na área
+                verde | Quagga.JS detecta automaticamente</div>
+            <div id="scanner-container">
+                <div class="scanner-overlay">
+                    <div class="scanner-line"></div>
+                </div>
+            </div>
+            <div id="scanner-status" class="scanner-status">Iniciando câmera...</div>
+            <button class="btn-manual" id="btnManual">✍️ Digitar manualmente</button>
+            <button class="btn-close-scanner" id="btnCloseScanner">❌ Cancelar</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
+    <script>
+        (function () {
+            var btnCamera = document.getElementById('btnCamera');
+            var modal = document.getElementById('scannerModal');
+            var closeModal = document.getElementById('closeModal');
+            var btnCloseScanner = document.getElementById('btnCloseScanner');
+            var btnManual = document.getElementById('btnManual');
+            var statusElement = document.getElementById('scanner-status');
+            var inputBusca = document.getElementById('termo_busca');
+            var searchForm = document.getElementById('searchForm');
+            var isScanning = false;
+
+            btnCamera.addEventListener('click', function () {
+                console.log('Abrindo scanner Quagga');
+                modal.style.display = 'block';
+                iniciarScanner();
+            });
+
+            closeModal.addEventListener('click', fecharScanner);
+            btnCloseScanner.addEventListener('click', fecharScanner);
+            btnManual.addEventListener('click', function () { fecharScanner(); inputBusca.focus(); });
+
+            function iniciarScanner() {
+                if (isScanning) return;
+                isScanning = true;
+                statusElement.textContent = 'Iniciando câmera...';
+                statusElement.className = 'scanner-status';
+
+                Quagga.init({
+                    inputStream: {
+                        name: "Live",
+                        type: "LiveStream",
+                        target: document.querySelector('#scanner-container'),
+                        constraints: {
+                            width: 1920,
+                            height: 1080,
+                            facingMode: "environment"
+                        }
+                    },
+                    decoder: {
+                        readers: ["ean_reader", "ean_8_reader", "code_128_reader", "code_39_reader", "upc_reader", "upc_e_reader"],
+                        debug: { drawBoundingBox: true, showFrequency: true, drawScanline: true }
+                    },
+                    locate: true,
+                    locator: { patchSize: "medium", halfSample: true }
+                }, function (err) {
+                    if (err) {
+                        console.error('Erro Quagga:', err);
+                        statusElement.textContent = 'Erro: ' + err.message;
+                        statusElement.className = 'scanner-status error';
+                        isScanning = false;
+                        return;
+                    }
+                    Quagga.start();
+                    statusElement.textContent = 'Posicione o código na área verde (Quagga.JS detectando)';
+                });
+
+                Quagga.onDetected(function (result) {
+                    var codigo = result.codeResult.code;
+                    console.log('Código detectado:', codigo);
+
+                    if (/
+                        ^
+                        [0 - 9] +
+                        $
+                        /.test(codigo)) {
+                        statusElement.textContent = '✅ Código: ' + codigo + ' (Quagga.JS)';
+                        statusElement.className = 'scanner-status success';
+                        if (navigator.vibrate) navigator.vibrate(200);
+                        inputBusca.value = codigo;
+                        setTimeout(function () {
+                            fecharScanner();
+                            searchForm.submit();
+                        }, 800);
+                    }
+                });
+            }
+
+            function fecharScanner() {
+                if (isScanning) {
+                    Quagga.stop();
+                    isScanning = false;
+                }
+                modal.style.display = 'none';
+                statusElement.textContent = 'Iniciando câmera...';
+                statusElement.className = 'scanner-status';
+            }
+        })();
+    </script>
+</body>
+
+</html>

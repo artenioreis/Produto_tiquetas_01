@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ produto.descricao }} - Detalhes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .product-info {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-info h1 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .info-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .info-item strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .price-box {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .filter-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-form input {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .filter-form button {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="{{ url_for('buscar_produto') }}" class="btn-back">⬅️ Voltar para Busca</a>
+
+        <div class="product-info">
+            <h1>{{ produto.descricao }}</h1>
+            <div class="info-grid">
+                <div class="info-item"><strong>Fabricante</strong>{{ produto.fabricante }}</div>
+                <div class="info-item"><strong>Código</strong>{{ produto.codigo }}</div>
+                <div class="info-item"><strong>EAN</strong>{{ produto.cod_ean or '-' }}</div>
+                <div class="info-item"><strong>Unidade</strong>{{ produto.unidade }}</div>
+            </div>
+            <div class="price-box">PREÇO DE VENDA (POL. 432): R$ {{ "%.2f"|format(produto.preco)|replace('.', ',') }}
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📦 Estoque Atual por Lote/Depósito</h2>
+            {% if estoque %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Lote</th>
+                        <th>Vencimento</th>
+                        <th>Qtd. Física</th>
+                        <th>Depósito</th>
+                        <th>Local Físico</th>
+                        <th>Origem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in estoque %}
+                    <tr>
+                        <td><strong>{{ item.Cod_Lote or '-' }}</strong></td>
+                        <td>{% if item.Dat_Vencim %}{{ item.Dat_Vencim.strftime('%d/%m/%Y') }}{% else %}-{% endif %}
+                        </td>
+                        <td>{{ item.Qtd_Fisico|int }}</td>
+                        <td>{{ item.Deposito }}</td>
+                        <td>{{ item.Loc_Fis or '-' }}</td>
+                        <td>{{ item.Origem }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="no-data">Nenhum estoque disponível</div>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2>📋 Últimas Entradas de Notas Fiscais</h2>
+            <form method="POST" class="filter-form">
+                <input type="date" name="data_inicio" value="{{ data_inicio }}" required>
+                <input type="date" name="data_fim" value="{{ data_fim }}" required>
+                <button type="submit">Filtrar Entradas</button>
+            </form>
+            {% if entradas %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Número NF</th>
+                        <th>Tipo</th>
+                        <th>Emitente</th>
+                        <th>Qtd Total</th>
+                        <th>Lote</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for nf in entradas %}
+                    <tr>
+                        <td>{{ nf.Dat_Movimento.strftime('%d/%m/%Y') }}</td>
+                        <td>{{ nf.Numero }}</td>
+                        <td>{{ 'Compra' if nf.Tip_NF == 'C' else nf.Tip_NF }}</td>
+                        <td>{{ nf.Emitente }}</td>
+                        <td>{{ nf.Total|int }}</td>
+                        <td>{{ nf.Cod_Lote or '-' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="no-data">Nenhuma entrada registrada no período</div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuração de Conexão - Sistema Integrado</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔐 Configuração de Conexão</h1>
+        <p class="subtitle">Sistema Integrado de Consulta e Etiquetas</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <div class="form-group">
+                <label for="server">Servidor SQL Server</label>
+                <input type="text" id="server" name="server" value="{{ config.get('server', '') }}"
+                    placeholder="Ex: localhost ou 192.168.1.10" required>
+                <div class="help-text">Endereço IP ou nome do servidor</div>
+            </div>
+
+            <div class="form-group">
+                <label for="database">Nome do Banco de Dados</label>
+                <input type="text" id="database" name="database" value="{{ config.get('database', '') }}"
+                    placeholder="Ex: GestaoFarma" required>
+            </div>
+
+            <div class="form-group">
+                <label for="driver">Driver SQL Server</label>
+                <select id="driver" name="driver">
+                    <option value="SQL Server">SQL Server (Padrão)</option>
+                    <option value="ODBC Driver 17 for SQL Server">ODBC Driver 17</option>
+                    <option value="ODBC Driver 18 for SQL Server">ODBC Driver 18</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="trusted">Tipo de Autenticação</label>
+                <select id="trusted" name="trusted" onchange="toggleAuth()">
+                    <option value="no">Usuário e Senha (SQL Server)</option>
+                    <option value="yes">Autenticação Windows</option>
+                </select>
+            </div>
+
+            <div id="auth-fields">
+                <div class="form-group">
+                    <label for="user">Usuário</label>
+                    <input type="text" id="user" name="user" value="{{ config.get('username', '') }}" placeholder="sa">
+                </div>
+
+                <div class="form-group">
+                    <label for="pwd">Senha</label>
+                    <input type="password" id="pwd" name="pwd" placeholder="••••••••">
+                </div>
+            </div>
+
+            <button type="submit" class="btn">💾 Salvar e Conectar</button>
+        </form>
+    </div>
+
+    <script>
+        function toggleAuth() {
+            const trusted = document.getElementById('trusted').value;
+            const authFields = document.getElementById('auth-fields');
+            authFields.style.display = (trusted === 'yes') ? 'none' : 'block';
+        }
+        toggleAuth();
+    </script>
+</body>
+
+</html>

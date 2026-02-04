@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo de Etiquetas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-back {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .search-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn-search {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: #212529;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .etiqueta-group {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-etiqueta {
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .btn-gondola {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-atacado {
+            background: #28a745;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏷️ Módulo de Etiquetas</h1>
+            <a href="{{ url_for('buscar_produto') }}" class="btn-back">← Voltar ao Sistema</a>
+        </div>
+
+        <div class="search-card">
+            <form method="POST" action="{{ url_for('pesquisar_etiquetas') }}" class="search-form">
+                <input type="text" name="termo" class="search-input"
+                    placeholder="Buscar por código ou nome do produto..." value="{{ termo }}" autofocus>
+                <button type="submit" class="btn-search">🔍 Buscar</button>
+            </form>
+        </div>
+
+        {% if resultados %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Descrição</th>
+                    <th>Preço</th>
+                    <th>Etiquetas</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in resultados %}
+                <tr>
+                    <td>{{ p.Cod_Produt }}</td>
+                    <td>{{ p.Des_Produt }}</td>
+                    <td>R$ {{ "%.2f"|format(p.Prc_Venda_V) }}</td>
+                    <td>
+                        <div class="etiqueta-group">
+                            <a href="{{ url_for('etiqueta', cod_prod=p.Cod_Produt, modelo='gondola') }}"
+                                class="btn-etiqueta btn-gondola">📄 Gôndola</a>
+                            <a href="{{ url_for('etiqueta', cod_prod=p.Cod_Produt, modelo='atacado') }}"
+                                class="btn-etiqueta btn-atacado">🏷️ Atacado</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</body>
+
+</html>
