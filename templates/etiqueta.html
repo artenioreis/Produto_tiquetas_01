@@ -12,11 +12,11 @@
                 % if modelo=='atacado' %
             }
 
-            80mm 40mm {
+            80mm 30mm {
                 % else %
             }
 
-            58mm 40mm {
+            58mm 30mm {
                 % endif %
             }
 
@@ -59,7 +59,6 @@
             min-height: 100vh;
         }
 
-        /* ========== BOTÕES DE AÇÃO (NÃO IMPRIMEM) ========== */
         .no-print {
             text-align: center;
             margin-bottom: 30px;
@@ -67,13 +66,6 @@
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        .no-print h2 {
-            margin-bottom: 20px;
-            color: #333;
-            font-size: 24px;
         }
 
         .btn {
@@ -87,18 +79,6 @@
             text-decoration: none;
             display: inline-block;
             transition: all 0.3s ease;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         .btn-print {
@@ -106,283 +86,197 @@
             color: white;
         }
 
-        .btn-print:hover {
-            background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
-        }
-
         .btn-back {
             background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
             color: white;
         }
 
-        .btn-back:hover {
-            background: linear-gradient(135deg, #495057 0%, #6c757d 100%);
-        }
-
-        /* ========== CONTAINER DA ETIQUETA ========== */
         .etiqueta-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 400px;
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
         }
 
-        /* ========== ETIQUETA GÔNDOLA (58mm x 40mm) ========== */
+        /* ========== ETIQUETA GÔNDOLA (58mm x 30mm) ========== */
         .etiqueta-gondola {
             width: 58mm;
-            height: 40mm;
-            padding: 2mm;
-            border: 2px solid #000;
+            height: 30mm;
+            padding: 1mm;
+            border: 1px solid #000;
             background: white;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            page-break-after: always;
-            position: relative;
+            overflow: hidden;
         }
 
         .etiqueta-gondola .codigo {
-            font-size: 7pt;
-            color: #666;
-            font-weight: 600;
-            text-align: left;
-            margin-bottom: 1mm;
+            font-size: 6pt;
+            font-weight: bold;
         }
 
         .etiqueta-gondola .descricao {
             font-size: 8pt;
-            font-weight: bold;
+            font-weight: 800;
             color: #000;
-            text-align: left;
+            text-align: center;
             line-height: 1.1;
-            height: 12mm;
-            overflow: hidden;
-            margin-bottom: 1mm;
+            height: 7mm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
         }
 
         .etiqueta-gondola .preco {
             font-size: 18pt;
-            font-weight: bold;
+            font-weight: 900;
             color: #000;
             text-align: center;
-            margin: 2mm 0;
+            line-height: 1;
         }
 
         .etiqueta-gondola .barcode {
             text-align: center;
-            margin: 1mm 0;
         }
 
         .etiqueta-gondola .barcode img {
-            max-width: 50mm;
-            height: auto;
+            width: 40mm;
+            height: 6mm;
         }
 
-        .etiqueta-gondola .ean {
-            font-size: 6pt;
-            color: #000;
-            text-align: center;
-            font-family: 'Courier New', monospace;
-            margin-top: 1mm;
-        }
-
-        .etiqueta-gondola .data {
+        .etiqueta-gondola .ean-text {
             font-size: 5pt;
-            color: #666;
-            text-align: right;
-            position: absolute;
-            bottom: 1mm;
-            right: 2mm;
+            text-align: center;
+            font-family: monospace;
+            margin-top: -0.5mm;
         }
 
-        /* ========== ETIQUETA ATACADO AMARELA (80mm x 40mm) ========== */
+        /* ========== ETIQUETA ATACADO (80mm x 30mm) ========== */
         .etiqueta-atacado {
             width: 80mm;
-            height: 40mm;
+            height: 30mm;
             background: #FFD700;
-            border: 3px solid #000;
-            padding: 2mm;
+            border: 2px solid #000;
+            padding: 0.5mm 1mm;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            page-break-after: always;
+            overflow: hidden;
         }
 
-        /* CABEÇALHO PRETO COM TÍTULOS AMARELOS */
         .etiqueta-atacado .header {
             background: #000;
             color: #FFD700;
             text-align: center;
-            padding: 1.5mm 0;
+            padding: 0.8mm 0;
             font-weight: bold;
-            font-size: 8pt;
+            font-size: 7pt;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            margin-bottom: 2mm;
         }
 
-        .etiqueta-atacado .header div {
-            padding: 0 2mm;
-        }
-
-        /* DESCRIÇÃO DO PRODUTO */
         .etiqueta-atacado .descricao {
             text-align: center;
-            font-size: 10pt;
+            font-size: 8.5pt;
             font-weight: bold;
             color: #000;
-            padding: 1mm 2mm;
-            line-height: 1.2;
-            min-height: 8mm;
+            line-height: 1;
+            height: 6mm;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin: 0.5mm 0;
         }
 
-        /* ÁREA DE PREÇOS - FUNDO AMARELO SEM FAIXA PRETA */
         .etiqueta-atacado .precos {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 3mm;
-            padding: 2mm;
-            background: #FFD700;
-            /* FUNDO AMARELO - SEM PRETO */
+            gap: 1.5mm;
+            padding: 0.5mm;
         }
 
         .etiqueta-atacado .preco-box {
             text-align: center;
-            padding: 2mm;
-            background: rgba(255, 255, 255, 0.3);
-            /* LEVE DIFERENCIAÇÃO */
-            border-radius: 2mm;
-        }
-
-        .etiqueta-atacado .preco-box .label {
-            font-size: 7pt;
-            font-weight: bold;
-            color: #000;
-            margin-bottom: 1mm;
-        }
-
-        .etiqueta-atacado .preco-box .preco-de {
-            font-size: 9pt;
-            color: #000;
-            text-decoration: line-through;
-            margin-bottom: 1mm;
+            padding: 1.2mm 0.8mm;
+            /* Ajustado para centralizar o preço sem as etiquetas */
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 1mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .etiqueta-atacado .preco-box .valor {
-            font-size: 16pt;
+            font-size: 14pt;
+            /* Ganhou um pouco mais de destaque */
             font-weight: bold;
             color: #000;
-            /* PRETO SOBRE AMARELO - VISÍVEL */
+            line-height: 1;
         }
 
-        .etiqueta-atacado .preco-box .unidade {
-            font-size: 6pt;
-            color: #000;
-            margin-top: 1mm;
-        }
-
-        /* CAIXA ATACADO COM DESTAQUE */
         .etiqueta-atacado .preco-box.destaque {
             background: rgba(255, 140, 0, 0.3);
-            border: 2px dashed #000;
+            border: 1px dashed #000;
         }
 
-        /* RODAPÉ */
         .etiqueta-atacado .footer {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            font-size: 6pt;
+            display: flex;
+            justify-content: space-between;
+            font-size: 5.5pt;
             color: #000;
-            padding: 1mm 0;
             font-weight: bold;
-            border-top: 2px solid #000;
-            margin-top: 1mm;
+            border-top: 1px solid #000;
+            padding-top: 0.5mm;
+            margin-top: 0.5mm;
         }
     </style>
 </head>
 
 <body>
-    <!-- ========== BOTÕES DE AÇÃO (NÃO IMPRIMEM) ========== -->
     <div class="no-print">
-        <h2>🏷️ Etiqueta: {{ produto.descricao[:50] }}{% if produto.descricao|length > 50 %}...{% endif %}</h2>
+        <h2>🏷️ Etiqueta: {{ produto.descricao[:50] }}</h2>
         <button onclick="window.print()" class="btn btn-print">🖨️ Imprimir Etiqueta</button>
         <a href="{{ url_for('buscar_produto') }}" class="btn btn-back">⬅️ Voltar para Busca</a>
     </div>
 
-    <!-- ========== ETIQUETA ========== -->
     <div class="etiqueta-wrapper">
         {% if modelo == 'atacado' %}
-        <!-- ========== MODELO ATACADO AMARELO ========== -->
         <div class="etiqueta-atacado">
-            <!-- CABEÇALHO PRETO -->
             <div class="header">
                 <div>PREÇO POR</div>
                 <div>A PARTIR DE</div>
             </div>
-
-            <!-- DESCRIÇÃO -->
-            <div class="descricao">
-                {{ produto.descricao }}
-            </div>
-
-            <!-- PREÇOS - FUNDO AMARELO SEM FAIXA PRETA -->
+            <div class="descricao">{{ produto.descricao }}</div>
             <div class="precos">
-                <!-- PREÇO NORMAL/VAREJO -->
                 <div class="preco-box">
-                    <div class="label">VAREJO</div>
-                    {% if produto.preco_de and produto.preco_de > produto.preco_por %}
-                    <div class="preco-de">DE: R$ {{ "%.2f"|format(produto.preco_de)|replace('.', ',') }}</div>
-                    {% endif %}
-                    <div class="valor">POR: R$ {{ "%.2f"|format(produto.preco_por)|replace('.', ',') }}</div>
-                    <div class="unidade">{{ produto.unidade }}</div>
+                    <div class="valor">R$ {{ "%.2f"|format(produto.preco_por)|replace('.', ',') }}</div>
                 </div>
-
-                <!-- PREÇO ATACADO -->
                 <div class="preco-box destaque">
-                    <div class="label">ATACADO</div>
                     <div class="valor">R$ {{ "%.2f"|format(produto.preco_atacado)|replace('.', ',') }}</div>
-                    <div class="unidade">A partir de {{ produto.qtd_atacado }} {{ produto.unidade }}</div>
+                    <div style="font-size: 5.5pt; font-weight: bold; margin-top: 0.5mm;">A partir de {{
+                        produto.qtd_atacado }} un</div>
                 </div>
             </div>
-
-            <!-- RODAPÉ -->
             <div class="footer">
-                <div>EAN: {{ produto.ean or '-' }}</div>
-                <div>{{ data_atual }}</div>
+                <span>EAN: {{ produto.ean or '-' }}</span>
+                <span>{{ data_atual }}</span>
             </div>
         </div>
-
         {% else %}
-        <!-- ========== MODELO GÔNDOLA PADRÃO ========== -->
         <div class="etiqueta-gondola">
-            <!-- CÓDIGO DO PRODUTO -->
             <div class="codigo">Cód: {{ produto.id }}</div>
-
-            <!-- DESCRIÇÃO -->
             <div class="descricao">{{ produto.descricao }}</div>
-
-            <!-- PREÇO -->
             <div class="preco">R$ {{ "%.2f"|format(produto.preco_por)|replace('.', ',') }}</div>
-
-            <!-- CÓDIGO DE BARRAS -->
             {% if barcode_img %}
             <div class="barcode">
                 <img src="data:image/png;base64,{{ barcode_img }}" alt="Código de Barras">
-                <div class="ean">{{ produto.ean }}</div>
+                <div class="ean-text">{{ produto.ean }}</div>
             </div>
             {% else %}
-            <div class="ean">EAN: {{ produto.ean or 'N/A' }}</div>
+            <div class="ean-text">EAN: {{ produto.ean or 'N/A' }}</div>
             {% endif %}
-
-            <!-- DATA/HORA -->
-            <div class="data">{{ data_atual }}</div>
         </div>
         {% endif %}
     </div>
