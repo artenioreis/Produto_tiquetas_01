@@ -166,6 +166,12 @@
             overflow: hidden;
         }
 
+        .etiqueta-atacado .codigo {
+            font-size: 6pt;
+            font-weight: bold;
+            color: #000;
+        }
+
         .etiqueta-atacado .header {
             background: #000;
             color: #FFD700;
@@ -197,20 +203,21 @@
             padding: 0.5mm;
         }
 
+        /* ALTERAÇÃO AQUI: A borda pontilhada agora se aplica a todas as caixas de preço */
         .etiqueta-atacado .preco-box {
             text-align: center;
             padding: 1.2mm 0.8mm;
-            /* Ajustado para centralizar o preço sem as etiquetas */
             background: rgba(255, 255, 255, 0.4);
             border-radius: 1mm;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            border: 1px dashed #000;
+            /* Borda adicionada aqui para afetar ambos os preços */
         }
 
         .etiqueta-atacado .preco-box .valor {
             font-size: 14pt;
-            /* Ganhou um pouco mais de destaque */
             font-weight: bold;
             color: #000;
             line-height: 1;
@@ -218,7 +225,7 @@
 
         .etiqueta-atacado .preco-box.destaque {
             background: rgba(255, 140, 0, 0.3);
-            border: 1px dashed #000;
+            /* A borda foi removida daqui pois já é herdada da classe .preco-box acima */
         }
 
         .etiqueta-atacado .footer {
@@ -244,6 +251,8 @@
     <div class="etiqueta-wrapper">
         {% if modelo == 'atacado' %}
         <div class="etiqueta-atacado">
+            <div class="codigo">Cód: {{ produto.id }}</div>
+
             <div class="header">
                 <div>PREÇO POR</div>
                 <div>A PARTIR DE</div>
