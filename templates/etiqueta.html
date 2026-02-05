@@ -29,6 +29,9 @@
                 margin: 0;
                 padding: 0;
                 background: white;
+                /* FORÇA A IMPRESSÃO DE CORES DE FUNDO (CABEÇALHO PRETO) */
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
 
             .no-print {
@@ -153,17 +156,20 @@
             margin-top: -0.5mm;
         }
 
-        /* ========== ETIQUETA ATACADO (80mm x 30mm) ========== */
+        /* ========== ETIQUETA ATACADO (80mm x 30mm) - AJUSTADA ========== */
         .etiqueta-atacado {
             width: 80mm;
             height: 30mm;
-            background: #FFD700;
+            background: #FFD700 !important;
             border: 2px solid #000;
-            padding: 0.5mm 1mm;
+            padding: 0.3mm 1mm;
+            /* Reduzido para caber o rodapé */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
 
         .etiqueta-atacado .codigo {
@@ -173,14 +179,17 @@
         }
 
         .etiqueta-atacado .header {
-            background: #000;
-            color: #FFD700;
+            background: #000 !important;
+            color: #FFD700 !important;
             text-align: center;
-            padding: 0.8mm 0;
+            padding: 0.5mm 0;
+            /* Reduzido */
             font-weight: bold;
             font-size: 7pt;
             display: grid;
             grid-template-columns: 1fr 1fr;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
 
         .etiqueta-atacado .descricao {
@@ -189,43 +198,46 @@
             font-weight: bold;
             color: #000;
             line-height: 1;
-            height: 6mm;
+            height: 5.5mm;
+            /* Reduzido de 6mm para 5.5mm */
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0.5mm 0;
+            margin: 0.3mm 0;
         }
 
         .etiqueta-atacado .precos {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1.5mm;
-            padding: 0.5mm;
+            padding: 0.2mm;
+            /* Reduzido */
         }
 
-        /* ALTERAÇÃO AQUI: A borda pontilhada agora se aplica a todas as caixas de preço */
         .etiqueta-atacado .preco-box {
             text-align: center;
-            padding: 1.2mm 0.8mm;
-            background: rgba(255, 255, 255, 0.4);
+            padding: 0.8mm 0.5mm;
+            /* Reduzido */
+            background: rgba(255, 255, 255, 0.4) !important;
             border-radius: 1mm;
             display: flex;
             flex-direction: column;
             justify-content: center;
             border: 1px dashed #000;
-            /* Borda adicionada aqui para afetar ambos os preços */
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
 
         .etiqueta-atacado .preco-box .valor {
-            font-size: 14pt;
+            font-size: 13.5pt;
+            /* Reduzido levemente */
             font-weight: bold;
             color: #000;
             line-height: 1;
         }
 
         .etiqueta-atacado .preco-box.destaque {
-            background: rgba(255, 140, 0, 0.3);
-            /* A borda foi removida daqui pois já é herdada da classe .preco-box acima */
+            background: rgba(255, 140, 0, 0.3) !important;
         }
 
         .etiqueta-atacado .footer {
@@ -235,8 +247,8 @@
             color: #000;
             font-weight: bold;
             border-top: 1px solid #000;
-            padding-top: 0.5mm;
-            margin-top: 0.5mm;
+            padding-top: 0.3mm;
+            margin-top: 0.3mm;
         }
     </style>
 </head>
@@ -245,7 +257,7 @@
     <div class="no-print">
         <h2>🏷️ Etiqueta: {{ produto.descricao[:50] }}</h2>
         <button onclick="window.print()" class="btn btn-print">🖨️ Imprimir Etiqueta</button>
-        <a href="{{ url_for('buscar_produto') }}" class="btn btn-back">⬅️ Voltar para Busca</a>
+        <button onclick="window.close()" class="btn btn-back">❌ Fechar Janela</button>
     </div>
 
     <div class="etiqueta-wrapper">
@@ -289,6 +301,12 @@
         </div>
         {% endif %}
     </div>
+
+    <footer class="footer-creativity no-print">
+        <p style="text-align: center; color: rgba(14, 13, 13, 0.7); font-size: 13px; margin-top: 20px;">
+            Projeto criado e desenvolvido por <strong>Artenio Reis</strong>
+        </p>
+    </footer>
 </body>
 
 </html>
